@@ -4,7 +4,8 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"log"
+
+	"github.com/wahyunurdian26/util/logger"
 
 	"github.com/go-redis/redis/v8"
 	_ "github.com/lib/pq"
@@ -39,10 +40,12 @@ func NewGRPCServer() *GrpcServer {
 	// Setup Database
 	db, err := sql.Open("postgres", cfg.DatabaseDSN)
 	if err != nil {
-		log.Fatalf("failed to open db connection: %v", err)
+		logger.Error("failed to open db connection: ", err)
+		panic(err)
 	}
 	if err := db.Ping(); err != nil {
-		log.Fatalf("failed to ping db: %v", err)
+		logger.Error("failed to ping db: ", err)
+		panic(err)
 	}
 
 	// Setup Redis
@@ -53,14 +56,16 @@ func NewGRPCServer() *GrpcServer {
 	})
 
 	// Run Goose Migrations
-	log.Println("Running database migrations...")
+	logger.Info("Running database migrations...")
 	if err := goose.SetDialect("postgres"); err != nil {
-		log.Fatalf("failed to set goose dialect: %v", err)
+		logger.Error("failed to set goose dialect: ", err)
+		panic(err)
 	}
 	if err := goose.Up(db, "db/migrations"); err != nil {
-		log.Fatalf("failed to run migrations: %v", err)
+		logger.Error("failed to run migrations: ", err)
+		panic(err)
 	}
-	log.Println("Migrations completed successfully.")
+	logger.Info("Migrations completed successfully.")
 
 	// Repositories
 	productRepo := postgresrepo.NewProductRepository(db)

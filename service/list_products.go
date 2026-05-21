@@ -8,10 +8,13 @@ import (
 	"github.com/wahyunurdian26/product-service/model"
 	pb "github.com/wahyunurdian26/product-service/contract/client"
 	"github.com/wahyunurdian26/product-service/util"
+	"github.com/wahyunurdian26/util/logger"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 func (s *productService) ListProducts(ctx context.Context, req *pb.ListProductsRequest) (*pb.ListProductsResponse, error) {
+	logger.Info("ListProducts request - search: ", req.Search, " type: ", req.Type, " sort_by: ", req.SortBy, " order: ", req.Order)
+
 	modelReq := model.ListProductRequest{
 		Search: req.Search,
 		Type:   req.Type,
@@ -23,12 +26,16 @@ func (s *productService) ListProducts(ctx context.Context, req *pb.ListProductsR
 
 	cachedProducts, err := s.cacheRepo.GetProductsCache(ctx, cacheKey)
 	if err == nil && cachedProducts != nil {
+		logger.Info("ListProducts cache HIT - key: ", cacheKey)
 		return mapProductsToPb(cachedProducts), nil
 	} else if err != nil && err != redis.Nil {
+		logger.Warn("ListProducts cache error (fallback to DB): ", err)
 	}
 
+	logger.Info("ListProducts cache MISS - fetching from DB")
 	products, err := s.productRepo.ListProducts(ctx, modelReq)
 	if err != nil {
+		logger.Error("ListProducts DB error: ", err)
 		return nil, err
 	}
 

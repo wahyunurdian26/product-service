@@ -2,7 +2,6 @@ package transport
 
 import (
 	"context"
-	"log"
 	"net"
 	"net/http"
 	"os"
@@ -11,6 +10,7 @@ import (
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	pb "github.com/wahyunurdian26/product-service/contract/client"
+	"github.com/wahyunurdian26/util/logger"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/health/grpc_health_v1"
@@ -49,27 +49,31 @@ func (g *GrpcServer) Run() {
 	// Gateway dials the local gRPC server
 	err := pb.RegisterProductServiceHandlerFromEndpoint(ctx, mux, "localhost:"+grpcPort, opts)
 	if err != nil {
-		log.Fatalf("Failed to start HTTP gateway: %v", err)
+		logger.Error("Failed to start HTTP gateway: ", err)
+		panic(err)
 	}
 
 	go g.waitForShutdown()
 
-	log.Printf("Product Service started successfully - GRPC on :%s, REST Gateway on :%s\n", grpcPort, httpPort)
+	logger.Info("Product Service started successfully - GRPC on :", grpcPort, " REST Gateway on :", httpPort)
 
 	// Start HTTP Server
 	go func() {
 		if err := http.ListenAndServe(":"+httpPort, mux); err != nil {
-			log.Fatalf("Failed to serve HTTP: %v", err)
+			logger.Error("Failed to serve HTTP: ", err)
+			panic(err)
 		}
 	}()
 
 	// Start gRPC Server
 	listener, err := net.Listen("tcp", ":"+grpcPort)
 	if err != nil {
-		log.Fatalf("Failed to listen gRPC: %v", err)
+		logger.Error("Failed to listen gRPC: ", err)
+		panic(err)
 	}
 	if err := g.handler.Serve(listener); err != nil {
-		log.Fatalf("Failed to serve gRPC: %v", err)
+		logger.Error("Failed to serve gRPC: ", err)
+		panic(err)
 	}
 }
 
@@ -77,15 +81,15 @@ func (g *GrpcServer) waitForShutdown() {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT, syscall.SIGHUP)
 	<-c
-	log.Println("Shutdown signal received")
+	logger.Info("Shutdown signal received")
 	g.Stop()
 }
 
 func (g *GrpcServer) Stop() {
-	log.Println("Stopping Server - initiating graceful shutdown")
+	logger.Info("Stopping Server - initiating graceful shutdown")
 	if g.handler != nil {
 		g.handler.GracefulStop()
 	}
 	g.close()
-	log.Println("Server stopped successfully")
+	logger.Info("Server stopped successfully")
 }
