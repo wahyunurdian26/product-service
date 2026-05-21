@@ -37,15 +37,14 @@ func (s *HttpServer) waitForShutdown(srv *http.Server) {
 
 func (s *HttpServer) Stop(srv *http.Server) {
 	log.Println("Stopping Server - initiating graceful shutdown")
-	
+
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	
+
 	if err := srv.Shutdown(ctx); err != nil {
 		log.Fatalf("Server Shutdown Failed:%+v", err)
 	}
 
-	// Close database & redis connections
 	if s.close != nil {
 		s.close()
 	}

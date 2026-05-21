@@ -2,8 +2,6 @@ package model
 
 import (
 	"time"
-
-	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
 // ProductType defines the enum for product types
@@ -31,15 +29,6 @@ type CreateProductRequest struct {
 	Name  string      `json:"name"`
 	Price float64     `json:"price"`
 	Type  ProductType `json:"type"`
-}
-
-// Validate validates the CreateProductRequest using ozzo-validation
-func (req CreateProductRequest) Validate() error {
-	return validation.ValidateStruct(&req,
-		validation.Field(&req.Name, validation.Required, validation.Length(2, 255)),
-		validation.Field(&req.Price, validation.Required, validation.Min(float64(1))),
-		validation.Field(&req.Type, validation.Required, validation.In(TypeSayuran, TypeProtein, TypeBuah, TypeSnack)),
-	)
 }
 
 // CreateProductResponse is the response payload

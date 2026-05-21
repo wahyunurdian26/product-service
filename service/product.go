@@ -31,9 +31,6 @@ func NewProductService(productRepo repository.ProductRepository, cacheRepo repos
 }
 
 func (s *productService) CreateProduct(ctx context.Context, req *model.CreateProductRequest) (*model.Product, error) {
-	if err := req.Validate(); err != nil {
-		return nil, err
-	}
 
 	product := &model.Product{
 		ID:        uuid.New().String(),
@@ -49,7 +46,6 @@ func (s *productService) CreateProduct(ctx context.Context, req *model.CreatePro
 		return nil, err
 	}
 
-	// Invalidate cache after creating a new product
 	_ = s.cacheRepo.InvalidateCache(ctx, "products_list_*")
 
 	return product, nil

@@ -77,19 +77,4 @@ func TestCreateProduct_Success(t *testing.T) {
 	}
 }
 
-func TestCreateProduct_InvalidData(t *testing.T) {
-	repo := &mockProductRepo{}
-	cache := &mockCacheRepo{}
-	svc := NewProductService(repo, cache)
 
-	req := &model.CreateProductRequest{
-		Name:  "",
-		Price: 15000,
-		Type:  model.TypeBuah,
-	}
-
-	_, err := svc.CreateProduct(context.Background(), req)
-	if err == nil {
-		t.Fatalf("expected error, got nil")
-	}
-}

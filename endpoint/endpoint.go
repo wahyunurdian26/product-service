@@ -6,6 +6,7 @@ import (
 	"github.com/go-kit/kit/endpoint"
 	"github.com/wahyunurdian26/product-service/model"
 	"github.com/wahyunurdian26/product-service/service"
+	"github.com/wahyunurdian26/product-service/validation"
 )
 
 type Endpoints struct {
@@ -23,6 +24,11 @@ func MakeEndpoints(svc service.ProductService) Endpoints {
 func makeCreateProductEndpoint(svc service.ProductService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(*model.CreateProductRequest)
+		
+		if err := validation.CreateProductValidation(req); err != nil {
+			return model.CreateProductResponse{Error: err.Error()}, nil
+		}
+
 		product, err := svc.CreateProduct(ctx, req)
 		if err != nil {
 			return model.CreateProductResponse{Error: err.Error()}, nil
