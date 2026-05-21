@@ -51,7 +51,6 @@ func (r *productRepository) ListProducts(ctx context.Context, req model.ListProd
 		argIdx++
 	}
 
-	// Sorting
 	sortBy := "created_at"
 	if req.SortBy == "price" || req.SortBy == "name" || req.SortBy == "created_at" {
 		sortBy = req.SortBy

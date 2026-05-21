@@ -4,7 +4,6 @@ import (
 	"time"
 )
 
-// ProductType defines the enum for product types
 type ProductType string
 
 const (
@@ -14,7 +13,6 @@ const (
 	TypeSnack   ProductType = "Snack"
 )
 
-// Product represents the product entity in the database
 type Product struct {
 	ID        string      `json:"id"`
 	Name      string      `json:"name"`
@@ -24,21 +22,18 @@ type Product struct {
 	UpdatedAt time.Time   `json:"updated_at"`
 }
 
-// CreateProductRequest is the payload for adding a new product
 type CreateProductRequest struct {
 	Name  string      `json:"name"`
 	Price float64     `json:"price"`
 	Type  ProductType `json:"type"`
 }
 
-// CreateProductResponse is the response payload
 type CreateProductResponse struct {
 	Product *Product `json:"product,omitempty"`
 	Message string   `json:"message,omitempty"`
 	Error   string   `json:"error,omitempty"`
 }
 
-// ListProductRequest is the parameter for listing products
 type ListProductRequest struct {
 	Search string `json:"search"`
 	Type   string `json:"type"`
@@ -46,7 +41,6 @@ type ListProductRequest struct {
 	Order  string `json:"order"`
 }
 
-// ListProductResponse is the response payload
 type ListProductResponse struct {
 	Products []Product `json:"products"`
 	Message  string    `json:"message,omitempty"`

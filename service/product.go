@@ -2,15 +2,13 @@ package service
 
 import (
 	"context"
-	"crypto/sha256"
-	"encoding/hex"
-	"encoding/json"
 	"time"
 
 	"github.com/go-redis/redis/v8"
 	"github.com/google/uuid"
 	"github.com/wahyunurdian26/product-service/model"
 	"github.com/wahyunurdian26/product-service/repository"
+	"github.com/wahyunurdian26/product-service/util"
 )
 
 type ProductService interface {
@@ -46,16 +44,15 @@ func (s *productService) CreateProduct(ctx context.Context, req *model.CreatePro
 		return nil, err
 	}
 
-	_ = s.cacheRepo.InvalidateCache(ctx, "products_list_*")
+	// Invalidate cache after creating a new product
+	_ = s.cacheRepo.InvalidateCache(ctx, util.MakeProductsPattern())
 
 	return product, nil
 }
 
 func (s *productService) ListProducts(ctx context.Context, req model.ListProductRequest) ([]model.Product, error) {
 	// Generate cache key based on request parameters
-	reqBytes, _ := json.Marshal(req)
-	hash := sha256.Sum256(reqBytes)
-	cacheKey := "products_list_" + hex.EncodeToString(hash[:])
+	cacheKey := util.MakeListProductsKey(req)
 
 	// Try to get from cache
 	cachedProducts, err := s.cacheRepo.GetProductsCache(ctx, cacheKey)
