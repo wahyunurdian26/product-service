@@ -1,6 +1,6 @@
-# Super Indo Product API Service
+# Product API Service
 
-This is a microservice developed for the Super Indo coding test. It is built using Golang and follows a modern `grpc-gateway` based architecture, providing both gRPC and REST HTTP interfaces seamlessly on the same port.
+This is a microservice It is built using Golang and follows a modern `grpc-gateway` based architecture, providing both gRPC and REST HTTP interfaces seamlessly on the same port.
 
 ## Features
 1. Add new products.
@@ -57,10 +57,13 @@ curl -X POST http://localhost:7070/api/v1/products \
   -d '{"name":"Susu UHT", "price":18000, "type":"Protein"}'
 ```
 
+![alt text](image.png)
+
 #### 3. List Products (With Filter & Sort)
 ```bash
 curl -X GET "http://localhost:7070/api/v1/products?search=Susu&type=Protein&sort_by=price&order=ASC"
 ```
+![alt text](image-1.png)
 
 **Query Parameters yang Tersedia:**
 - `search` (string): Mencari produk berdasarkan nama (menggunakan `ILIKE`).
