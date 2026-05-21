@@ -9,6 +9,7 @@ import (
 	"github.com/go-redis/redis/v8"
 	_ "github.com/joho/godotenv/autoload"
 	_ "github.com/lib/pq"
+	"github.com/pressly/goose/v3"
 
 	"github.com/wahyunurdian26/product-service/config"
 	"github.com/wahyunurdian26/product-service/endpoint"
@@ -38,6 +39,16 @@ func main() {
 		DB:       0,
 	})
 	defer redisClient.Close()
+
+	// Run Goose Migrations
+	log.Println("Running database migrations...")
+	if err := goose.SetDialect("postgres"); err != nil {
+		log.Fatalf("failed to set goose dialect: %v", err)
+	}
+	if err := goose.Up(db, "db/migrations"); err != nil {
+		log.Fatalf("failed to run migrations: %v", err)
+	}
+	log.Println("Migrations completed successfully.")
 
 	// Repositories
 	productRepo := postgresrepo.NewProductRepository(db)

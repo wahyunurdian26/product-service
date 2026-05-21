@@ -5,7 +5,6 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
-	"errors"
 	"time"
 
 	"github.com/go-redis/redis/v8"
@@ -32,19 +31,8 @@ func NewProductService(productRepo repository.ProductRepository, cacheRepo repos
 }
 
 func (s *productService) CreateProduct(ctx context.Context, req *model.CreateProductRequest) (*model.Product, error) {
-	if req.Name == "" || req.Price <= 0 {
-		return nil, errors.New("invalid product data")
-	}
-
-	validTypes := map[model.ProductType]bool{
-		model.TypeSayuran: true,
-		model.TypeProtein: true,
-		model.TypeBuah:    true,
-		model.TypeSnack:   true,
-	}
-
-	if !validTypes[req.Type] {
-		return nil, errors.New("invalid product type")
+	if err := req.Validate(); err != nil {
+		return nil, err
 	}
 
 	product := &model.Product{
