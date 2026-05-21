@@ -5,7 +5,7 @@ package product;
 option go_package = "github.com/wahyunurdian26/product-service/contract/client";
 
 import "google/protobuf/timestamp.proto";
-// import "google/api/annotations.proto"; // Optional for standard grpc
+
 
 
 service ProductService {
