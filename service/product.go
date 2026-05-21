@@ -44,32 +44,27 @@ func (s *productService) CreateProduct(ctx context.Context, req *model.CreatePro
 		return nil, err
 	}
 
-	// Invalidate cache after creating a new product
 	_ = s.cacheRepo.InvalidateCache(ctx, util.MakeProductsPattern())
 
 	return product, nil
 }
 
 func (s *productService) ListProducts(ctx context.Context, req model.ListProductRequest) ([]model.Product, error) {
-	// Generate cache key based on request parameters
+
 	cacheKey := util.MakeListProductsKey(req)
 
-	// Try to get from cache
 	cachedProducts, err := s.cacheRepo.GetProductsCache(ctx, cacheKey)
 	if err == nil && cachedProducts != nil {
 		return cachedProducts, nil
 	} else if err != nil && err != redis.Nil {
-		// Log error if it's not simply a miss
-		// Here we ignore for simplicity
+
 	}
 
-	// Fetch from DB
 	products, err := s.productRepo.ListProducts(ctx, req)
 	if err != nil {
 		return nil, err
 	}
 
-	// Save to cache
 	_ = s.cacheRepo.SetProductsCache(ctx, cacheKey, products, 5*time.Minute)
 
 	return products, nil
