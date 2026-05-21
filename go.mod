@@ -3,16 +3,18 @@ module github.com/wahyunurdian26/product-service
 go 1.25.7
 
 require (
+	github.com/go-kit/kit v0.13.0
 	github.com/go-ozzo/ozzo-validation/v4 v4.3.0
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/google/uuid v1.6.0
-	github.com/gorilla/handlers v1.5.2
-	github.com/gorilla/mux v1.8.1
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.29.0
 	github.com/joho/godotenv v1.5.1
 	github.com/lib/pq v1.12.3
 	github.com/pressly/goose/v3 v3.27.1
 	github.com/wahyunurdian26/util v0.0.1
+	go.uber.org/mock v0.6.0
 	google.golang.org/grpc v1.80.0
+	google.golang.org/protobuf v1.36.11
 )
 
 require (
@@ -24,11 +26,12 @@ require (
 	github.com/elastic/go-sysinfo v1.15.4 // indirect
 	github.com/elastic/go-windows v1.0.2 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
-	github.com/go-kit/kit v0.13.0 // indirect
 	github.com/go-kit/log v0.2.0 // indirect
 	github.com/go-logfmt/logfmt v0.5.1 // indirect
 	github.com/golang-jwt/jwt/v4 v4.5.2 // indirect
+	github.com/gorilla/handlers v1.5.2 // indirect
 	github.com/gorilla/schema v1.2.0 // indirect
+	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0 // indirect
 	github.com/jcchavezs/porto v0.1.0 // indirect
 	github.com/mfridman/interpolate v0.0.2 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
@@ -36,7 +39,9 @@ require (
 	github.com/santhosh-tekuri/jsonschema v1.2.4 // indirect
 	github.com/sethvargo/go-retry v0.3.0 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
+	github.com/soheilhy/cmux v0.1.5 // indirect
 	go.elastic.co/apm v1.15.0 // indirect
+	go.elastic.co/apm/module/apmgrpc v1.15.0 // indirect
 	go.elastic.co/apm/module/apmhttp v1.15.0 // indirect
 	go.elastic.co/apm/module/apmlogrus v1.15.0 // indirect
 	go.elastic.co/fastjson v1.1.0 // indirect
@@ -49,9 +54,7 @@ require (
 	golang.org/x/telemetry v0.0.0-20260311193753-579e4da9a98c // indirect
 	golang.org/x/text v0.36.0 // indirect
 	golang.org/x/tools v0.43.0 // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20260414002931-afd174a4e478 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260420184626-e10c466a9529 // indirect
-	google.golang.org/protobuf v1.36.11 // indirect
 	howett.net/plist v1.0.1 // indirect
 )
-
-replace github.com/wahyunurdian26/util => c:\go\microservice\util

@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package product;
+
+option go_package = "github.com/wahyunurdian26/product-service/contract/client";
+
+import "google/protobuf/timestamp.proto";
+// import "google/api/annotations.proto"; // Optional for standard grpc
+
+
+service ProductService {
+    rpc HealthProduct(HealthProductRequest) returns (HealthProductResponse) {}
+    rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse) {}
+    rpc ListProducts(ListProductsRequest) returns (ListProductsResponse) {}
+}
+
+message Product {
+    string id = 1;
+    string name = 2;
+    double price = 3;
+    string type = 4;
+    google.protobuf.Timestamp created_at = 5;
+    google.protobuf.Timestamp updated_at = 6;
+}
+
+message CreateProductRequest {
+    string name = 1;
+    double price = 2;
+    string type = 3;
+}
+
+message CreateProductResponse {
+    Product product = 1;
+}
+
+message ListProductsRequest {
+    string search = 1;
+    string type = 2;
+    string sort_by = 3;
+    string order = 4;
+}
+
+message ListProductsResponse {
+    repeated Product products = 1;
+}
+
+message HealthProductRequest {}
+
+message HealthProductResponse {
+    string status = 1;
+}
+
+

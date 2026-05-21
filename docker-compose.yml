@@ -13,14 +13,14 @@ services:
   redis:
     image: redis:7-alpine
     ports:
-      - "6379:6379"
+      - "6380:6379"
 
   app:
     build: .
     ports:
-      - "8080:8080"
+      - "6668:6668"
     environment:
-      HTTP_PORT: 8080
+      GRPC_PORT: 6668
       DATABASE_DSN: postgres://postgres:password@db:5432/superindo?sslmode=disable
       REDIS_HOST: redis
       REDIS_PORT: 6379

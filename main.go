@@ -2,10 +2,10 @@ package main
 
 import (
 	_ "github.com/joho/godotenv/autoload"
-	httptransport "github.com/wahyunurdian26/product-service/transport"
+	"github.com/wahyunurdian26/product-service/transport"
 )
 
 func main() {
-	srv := httptransport.NewHTTPServer()
+	srv := transport.NewGRPCServer()
 	srv.Run()
 }

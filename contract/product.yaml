@@ -1,0 +1,12 @@
+type: google.api.Service
+config_version: 3
+
+http:
+  rules:
+    - selector: product.ProductService.CreateProduct
+      post: /api/v1/products
+      body: "*"
+    - selector: product.ProductService.ListProducts
+      get: /api/v1/products
+    - selector: product.ProductService.HealthProduct
+      get: /health
