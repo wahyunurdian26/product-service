@@ -1,4 +1,4 @@
-package repository
+package redisrepo
 
 import (
 	"context"
@@ -7,19 +7,14 @@ import (
 
 	"github.com/go-redis/redis/v8"
 	"github.com/wahyunurdian26/product-service/model"
+	"github.com/wahyunurdian26/product-service/repository"
 )
-
-type CacheRepository interface {
-	SetProductsCache(ctx context.Context, key string, products []model.Product, ttl time.Duration) error
-	GetProductsCache(ctx context.Context, key string) ([]model.Product, error)
-	InvalidateCache(ctx context.Context, pattern string) error
-}
 
 type cacheRepository struct {
 	client *redis.Client
 }
 
-func NewCacheRepository(client *redis.Client) CacheRepository {
+func NewCacheRepository(client *redis.Client) repository.CacheRepository {
 	return &cacheRepository{client: client}
 }
 
